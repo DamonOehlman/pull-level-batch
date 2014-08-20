@@ -6,6 +6,10 @@ var Through = require('pull-core').Through;
   Gather upstream items with a valid `key` and `value` into optimal batches
   for writing with leveldb batch operations.
 
+  ## Usage
+
+  See the tests.
+
 **/
 module.exports = Through(function(read, maxSize, encoding) {
   var buffered = [];
@@ -31,7 +35,7 @@ module.exports = Through(function(read, maxSize, encoding) {
       itemSize = Buffer.byteLength(data.key + data.value, encoding);
 
       // if this item will push us over, extract a payload
-      if (currentSize + itemSize >= maxSize) {
+      if (currentSize + itemSize > maxSize) {
         payload = buffered.splice(0);
         currentSize = 0;
       }

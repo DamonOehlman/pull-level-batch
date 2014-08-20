@@ -29,7 +29,7 @@ test('if the batch size is large enough all items should come through in a singl
   t.plan(1);
   pull(
     pull.values(data),
-    batch(7 * data.length + 1),
+    batch(7 * data.length),
     pull.drain(function(batch) {
       t.equal(batch.length, data.length);
     })
