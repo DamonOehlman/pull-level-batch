@@ -1,0 +1,27 @@
+{
+  "name": "pull-level-batch",
+  "version": "0.0.0",
+  "description": "Collect items into batches for optimal write operations to leveldb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DamonOehlman/pull-level-batch.git"
+  },
+  "keywords": [
+    "pull-stream",
+    "leveldb",
+    "batch"
+  ],
+  "author": "Damon Oehlman <damon.oehlman@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DamonOehlman/pull-level-batch/issues"
+  },
+  "homepage": "https://github.com/DamonOehlman/pull-level-batch",
+  "dependencies": {
+    "pull-core": "^1.0.0"
+  }
+}
