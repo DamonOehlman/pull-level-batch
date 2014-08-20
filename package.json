@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/DamonOehlman/pull-level-batch",
   "dependencies": {
+    "looper": "^3.0.0",
     "pull-core": "^1.0.0"
   },
   "devDependencies": {

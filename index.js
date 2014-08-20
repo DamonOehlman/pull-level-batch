@@ -1,3 +1,4 @@
+var looper = require('looper');
 var Through = require('pull-core').Through;
 
 /**
@@ -11,51 +12,54 @@ var Through = require('pull-core').Through;
   See the tests.
 
 **/
-module.exports = Through(function(read, maxSize, encoding) {
+module.exports = function(maxSize, encoding) {
   var buffered = [];
   var currentSize = 0;
+  var output = [];
+  var ended = null;
 
   // set default max size to match default leveldb write buffer size
   maxSize = maxSize || (4 * 1024 * 1024);
 
-  return function(abort, cb) {
-    function next(end, data) {
-      var payload;
-      var itemSize;
-
-      if (end) {
-        if (buffered.length > 0) {
-          return cb(null, buffered.splice(0));
-        }
-
-        return cb(end, data);
+  return function(read) {
+    return function(abort, cb) {
+      if (ended) {
+        return cb(ended);
       }
 
-      // calculate the size of the item
-      itemSize = Buffer.byteLength(data.key + data.value, encoding);
+      looper(function(next) {
+        read(abort, function(end, data) {
+          var itemSize;
 
-      // if this item will push us over, extract a payload
-      if (currentSize + itemSize > maxSize) {
-        payload = buffered.splice(0);
-        currentSize = 0;
-      }
+          ended = ended || end;
+          if (ended) {
+            if (buffered.length || output.length) {
+              return cb(null, buffered.splice(0).concat(output.splice(0)));
+            }
 
-      // add the new item to the buffer
-      buffered.push(data);
-      currentSize += itemSize;
+            return cb(ended);
+          }
 
-      // if we have a payload, then trigger the callback
-      if (Array.isArray(payload) && payload.length > 0) {
-        return cb(null, payload);
-      }
+          // calculate the size of the item
+          itemSize = Buffer.byteLength(data.key + data.value, encoding);
 
-      read(null, next);
-    }
+          // if this item will push us over, extract a payload
+          if (currentSize + itemSize > maxSize) {
+            output = buffered.splice(0);
+            currentSize = 0;
+          }
 
-    if (abort) {
-      return cb(abort);
-    }
+          // add the new item to the buffer
+          buffered.push(data);
+          currentSize += itemSize;
 
-    read(abort, next);
+          if (output.length) {
+            return cb(null, output.splice(0));
+          }
+
+          next();
+        });
+      });
+    };
   };
-});
+};
