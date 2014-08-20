@@ -1,6 +1,6 @@
 {
   "name": "pull-level-batch",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Collect items into batches for optimal write operations to leveldb",
   "main": "index.js",
   "scripts": {
