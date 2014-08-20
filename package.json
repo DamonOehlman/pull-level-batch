@@ -4,7 +4,7 @@
   "description": "Collect items into batches for optimal write operations to leveldb",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/all.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,9 @@
   "homepage": "https://github.com/DamonOehlman/pull-level-batch",
   "dependencies": {
     "pull-core": "^1.0.0"
+  },
+  "devDependencies": {
+    "pull-stream": "^2.24.0",
+    "tape": "^2.14.0"
   }
 }
